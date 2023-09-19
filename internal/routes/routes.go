@@ -5,7 +5,7 @@ import (
 	"github.com/puranadhikari/go-boilerplate/internal/controller"
 )
 
-func RegisterRoutes(r *gin.RouterGroup, ctl *controller.Controllers) {
-	// Register auth routes
-	AuthRoutes(r, ctl.UserController)
+func RegisterRoutes(prefix string, r *gin.Engine, ctl *controller.Controllers) {
+	grp := r.Group(prefix)
+	AuthRoutes(grp, ctl.UserController)
 }
