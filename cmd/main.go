@@ -8,6 +8,7 @@ import (
 	"github.com/puranadhikari/go-boilerplate/internal/controller"
 	"github.com/puranadhikari/go-boilerplate/internal/model"
 	"github.com/puranadhikari/go-boilerplate/internal/repository"
+	"github.com/puranadhikari/go-boilerplate/internal/routes"
 	"github.com/puranadhikari/go-boilerplate/internal/service"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -40,14 +41,14 @@ func main() {
 	ur := repository.WithUserRepository(db)
 	us := service.WithUserService(ur)
 	uc := controller.WithUserController(us)
-	initialize(cfg, controller.WithControllers(uc))
-}
 
-func initialize(cfg config.Config, ctl *controller.Controllers) {
+	ctl := controller.WithControllers(uc)
 	r := gin.Default()
 
+	// Define the global route group
+	v1 := r.Group("/api/v1")
 	// Set up routes.
-	r.POST("/signup", ctl.UserController.Signup)
+	routes.RegisterRoutes(v1, ctl)
 
 	// Start the Gin server.
 	r.Run(fmt.Sprintf(":%d", cfg.App.Port))

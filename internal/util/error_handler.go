@@ -22,10 +22,13 @@ func HandleValidationError(err error) *ErrorResponse {
 			tag := e.Tag()
 
 			switch fieldName {
-			case "Username":
-				resp.Errors["username"] = "Username is required"
 			case "Email":
-				resp.Errors["email"] = "Valid email is required"
+				switch tag {
+				case "required":
+					resp.Errors["email"] = "Email is required"
+				case "email":
+					resp.Errors["email"] = "Email must be a valid email address"
+				}
 			case "Password":
 				switch tag {
 				case "required":

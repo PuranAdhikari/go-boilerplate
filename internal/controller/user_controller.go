@@ -5,5 +5,5 @@ import (
 )
 
 type IUserController interface {
-	Signup(ctx *gin.Context)
+	Register(ctx *gin.Context)
 }
