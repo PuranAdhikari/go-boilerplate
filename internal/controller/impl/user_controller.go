@@ -5,22 +5,25 @@ import (
 	"github.com/puranadhikari/go-boilerplate/internal/dto"
 	"github.com/puranadhikari/go-boilerplate/internal/service"
 	"github.com/puranadhikari/go-boilerplate/internal/util"
+	"github.com/puranadhikari/go-boilerplate/pkg/logger"
+	"net/http"
 )
 
 type UserController struct {
 	Us service.IUserService
 }
 
-func (c *UserController) Signup(ctx *gin.Context) {
-	var input dto.SignupRequest
+func (c *UserController) Register(ctx *gin.Context) {
+	var input dto.RegisterRequest
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		util.RespondWithError(ctx, 422, err)
+		logger.Log.With(err).Errorf("error while validating user register request")
+		ctx.JSON(http.StatusUnprocessableEntity, util.HandleValidationError(err))
 		return
 	}
 
-	response, err := c.Us.Signup(input.Email, input.Password)
+	response, err := c.Us.Register(input.Email, input.Password)
 	if err != nil {
-		ctx.JSON(500, gin.H{"error": "Failed to create user"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

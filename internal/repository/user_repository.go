@@ -6,4 +6,5 @@ import (
 
 type IUserRepository interface {
 	CreateUser(user *model.User) error
+	EmailExists(email string) (bool, error)
 }

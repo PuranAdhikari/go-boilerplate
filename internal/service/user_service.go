@@ -5,5 +5,5 @@ import (
 )
 
 type IUserService interface {
-	Signup(email, password string) (*dto.SignUpResponse, error)
+	Register(email, password string) (*dto.RegisterResponse, error)
 }
